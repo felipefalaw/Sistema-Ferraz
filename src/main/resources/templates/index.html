@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Emails - FA Advogados</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-p5VYvI1LjqfMz0H0y8ax+zIimM1g5g8JYb0i57a5q8kAdqj3xS+GxG6vVG3iXU5P5H4EwxlYb5iZx0O9lH0Tg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+<header class="hero-header">
+    <div class="hero-background">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+        <div class="user-greeting" id="userGreeting"></div>
+    </div>
+    <div class="header-content">
+        <div class="logo-section">
+            <div class="logo-container">
+                <img src="/assets/FA.png" class="logo-image" alt="FA Advogados">
+            </div>
+            <div class="logo-text">
+                <h1>Sistema de Emails</h1>
+                <span class="tagline">Gestão Corporativa</span>
+            </div>
+        </div>
+        <nav class="modern-nav">
+            <button id="cadastroTab" class="nav-btn active" data-tab="cadastro">
+                <div class="btn-content">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Novo Email</span>
+                </div>
+            </button>
+            <button id="listarTab" class="nav-btn" data-tab="listar">
+                <div class="btn-content">
+                    <i class="fas fa-inbox"></i>
+                    <span>Inbox</span>
+                </div>
+            </button>
+        </nav>
+    </div>
+</header>
+
+<div class="modern-container">
+    <main>
+        <div id="cadastroContent" class="tab-content active">
+            <div class="modern-card">
+                <div class="card-header">
+                    <div class="header-icon"> <i class="fas fa-envelope"></i></div>
+                    <div class="header-text">
+                        <h2>Cadastrar Novo Email</h2>
+                        <p>Registre um novo email no sistema com informações detalhadas</p>
+                    </div>
+                </div>
+
+                <!-- Sistema de Pastas/Status - Estilo Gmail -->
+                <div class="email-folders-system">
+                    <div class="folders-header">
+                        <div class="folders-title">
+                            <i class="fas fa-folder"></i>
+                            <h3>Organizar por Status</h3>
+                        </div>
+                        <button class="folders-toggle" id="foldersToggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+
+                    <div class="folders-container" id="foldersContainer">
+                        <div class="folder-category">
+                            <h4>Status do Email</h4>
+                            <div class="folder-list">
+                                <button class="folder-item active" data-status="todos">
+                                    <i class="fas fa-inbox"></i>
+                                    <span>Todos os Emails</span>
+                                    <span class="folder-count" id="countTodos">0</span>
+                                </button>
+
+                                <button class="folder-item" data-status="recebido">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>Recebidos</span>
+                                    <span class="folder-count" id="countRecebido">0</span>
+                                </button>
+
+                                <button class="folder-item" data-status="lido">
+                                    <i class="fas fa-envelope-open"></i>
+                                    <span>Lidos</span>
+                                    <span class="folder-count" id="countLido">0</span>
+                                </button>
+
+                                <button class="folder-item" data-status="respondido">
+                                    <i class="fas fa-reply"></i>
+                                    <span>Respondidos</span>
+                                    <span class="folder-count" id="countRespondido">0</span>
+                                </button>
+
+                                <button class="folder-item" data-status="arquivado">
+                                    <i class="fas fa-archive"></i>
+                                    <span>Arquivados</span>
+                                    <span class="folder-count" id="countArquivado">0</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="folder-category">
+                            <h4>Filtros Rápidos</h4>
+                            <div class="folder-list">
+                                <button class="folder-item" data-filter="unread">
+                                    <i class="fas fa-circle"></i>
+                                    <span>Não Lidos</span>
+                                    <span class="folder-count" id="countUnread">0</span>
+                                </button>
+
+                                <button class="folder-item" data-filter="important">
+                                    <i class="fas fa-star"></i>
+                                    <span>Importantes</span>
+                                    <span class="folder-count" id="countImportant">0</span>
+                                </button>
+
+                                <button class="folder-item" data-filter="today">
+                                    <i class="fas fa-calendar-day"></i>
+                                    <span>Hoje</span>
+                                    <span class="folder-count" id="countToday">0</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="emailForm" class="modern-form">
+                    <div class="form-section">
+                        <div class="form-group full-width">
+                            <label for="assunto"><i class="fas fa-tag"></i> Assunto</label>
+                            <input type="text" id="assunto" name="assunto" required placeholder="Digite o assunto do email">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="destinatario"><i class="fas fa-user-check"></i> Destinatário</label>
+                            <input type="email" id="destinatario" name="destinatario" placeholder="destinatario@exemplo.com">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="corpo"><i class="fas fa-align-left"></i> Corpo do Email</label>
+                            <textarea id="corpo" name="corpo" rows="6" required placeholder="Digite o conteúdo do email..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="cta-button">
+                            <span class="btn-text">Cadastrar Email</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div id="message" class="message hidden"></div>
+            </div>
+        </div>
+
+        <div id="listarContent" class="tab-content">
+            <div class="modern-card">
+                <div class="card-header">
+                    <div class="header-icon"><i class="fas fa-inbox"></i></div>
+                    <div class="header-text">
+                        <h2>Inbox de Emails</h2>
+                        <p>Visualize e gerencie todos os emails do sistema</p>
+                    </div>
+                    <button id="refreshBtn" class="refresh-btn">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Atualizar</span>
+                    </button>
+                </div>
+
+                <!-- Barra de pesquisa -->
+                <div class="search-container">
+                    <form id="searchForm" class="search-box">
+                        <input type="text" id="emailSearch" placeholder="Pesquisar emails por assunto, remetente ou destinatário..." autocomplete="off">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+                    <ul id="searchHistory" class="search-history"></ul>
+                </div>
+
+                <div id="emailsList" class="emails-container">
+                    <div class="loading-state">
+                        <div class="modern-spinner"></div>
+                        <p>Carregando emails...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal para responder emails -->
+<div id="replyModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="header-icon"><i class="fas fa-reply"></i></div>
+            <div class="header-text">
+                <h3>Responder Email</h3>
+                <p>Compose sua resposta</p>
+            </div>
+            <button id="closeReplyModal" class="close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="replyForm" class="modern-form">
+            <div class="form-section">
+                <div class="form-group full-width">
+                    <label for="replyAssunto"><i class="fas fa-tag"></i> Assunto</label>
+                    <input type="text" id="replyAssunto" name="assunto" required>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="replyCorpo"><i class="fas fa-align-left"></i> Sua Resposta</label>
+                    <textarea id="replyCorpo" name="corpo" rows="8" required placeholder="Digite sua resposta..."></textarea>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" id="cancelReply" class="secondary-btn">
+                    <span>Cancelar</span>
+                </button>
+                <button type="submit" class="cta-button">
+                    <span class="btn-text">Enviar Resposta</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </form>
+
+        <div id="replyMessage" class="message hidden"></div>
+    </div>
+</div>
+
+<script src="/js/script.js"></script>
+</body>
+</html>
