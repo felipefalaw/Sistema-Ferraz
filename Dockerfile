@@ -34,4 +34,4 @@ RUN mvn clean package -DskipTests -Dproject.build.sourceEncoding=UTF-8
 EXPOSE 8080
 
 # Comando para esperar o MySQL iniciar antes de rodar a aplicação
-CMD ["./wait-for-it.sh", "mysql_armazenar:3306", "--", "java", "-jar", "target/armazenar-0.0.1-SNAPSHOT.jar"]
+CMD ["./wait-for-it.sh", "mysql_armazenar:3306", "--", "java", "-jar", "app.jar"]
