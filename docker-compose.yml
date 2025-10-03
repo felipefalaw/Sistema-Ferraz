@@ -1,38 +1,34 @@
 services:
-  db:
-    image: mysql:8
+  mysql_armazenar:
+    image: mysql:8.0
     container_name: mysql_armazenar
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: fefe21@
       MYSQL_DATABASE: armazenar
     ports:
-      - "3307:3306"
+      - "8082:8080"
     volumes:
-      # Evita que o MySQL trave na inicialização
-      # - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
       - mysql_data:/var/lib/mysql
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pfefe21@"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-  adminer:
-    image: adminer
-    container_name: armazenar-adminer-1
-    restart: always
-    ports:
-      - "8081:8080"
-
-  app:
-    image: armazenar-app
+  spring_armazenar:
+    build: .
     container_name: spring_armazenar
-    build:
-      context: .
-      dockerfile: Dockerfile
     depends_on:
-      - db
+      mysql_armazenar:
+        condition: service_healthy
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/armazenar
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_armazenar:3306/armazenar?createDatabaseIfNotExist=true&connectTimeout=60000&socketTimeout=60000
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_PASSWORD: fefe21@
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
 
 volumes:
   mysql_data:
