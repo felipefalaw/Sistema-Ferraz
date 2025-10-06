@@ -27,12 +27,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ← ADICIONE ESTA LINHA
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/assets/**").permitAll()
-                        .requestMatchers("/login", "/index", "/cadastroUser", "/cadastro",
+                        .requestMatchers("/api/**", "/", "/login", "/index", "/cadastroUser", "/cadastro",
                                 "/emails", "/api/remetente", "/api/emails/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -41,13 +42,13 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ADICIONE ESTE MÉTODO PARA CORS
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*")); // Permite todas as origens
+        configuration.setAllowedOriginPatterns(List.of("*")); // Permite qualquer origem
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -55,12 +56,13 @@ public class SecurityConfig {
         return source;
     }
 
+
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ADICIONE UserDetailsService para evitar erro de AuthenticationManager
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails user = User.builder()

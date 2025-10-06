@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   mysql_armazenar:
     image: mysql:8.0
@@ -6,7 +8,7 @@ services:
       MYSQL_ROOT_PASSWORD: fefe21@
       MYSQL_DATABASE: armazenar
     ports:
-      - "8082:8080"
+      - "3307:3306"  # Opcional, para acessar o banco via host
     volumes:
       - mysql_data:/var/lib/mysql
       - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
@@ -17,7 +19,9 @@ services:
       retries: 10
 
   spring_armazenar:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: spring_armazenar
     depends_on:
       mysql_armazenar:
@@ -29,6 +33,7 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: fefe21@
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+    restart: unless-stopped
 
 volumes:
   mysql_data:
