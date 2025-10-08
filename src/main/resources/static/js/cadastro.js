@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const messageDiv = document.getElementById("message");
   const submitBtn = form.querySelector(".login-button");
 
-  const API_URL = "http://localhost:8080/cadastro";
+  const API_URL = "https://armazenar-production.up.railway.app/cadastroUser";
+
 
   const toggles = document.querySelectorAll(".password-toggle");
   toggles.forEach(toggle => {
