@@ -32,11 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
     hideMessage();
 
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ login, senha }),
       });
+
 
       if (response.ok) {
         const data = await response.json();
