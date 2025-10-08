@@ -31,26 +31,23 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Permite acesso público às rotas de autenticação e páginas estáticas
+                        // Permite acesso público
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/cadastro").permitAll()
                         .requestMatchers("/cadastroUser").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/index").permitAll()
                         .requestMatchers("/").permitAll()
-
-                        // Recursos estáticos
                         .requestMatchers("/css/**", "/js/**", "/assets/**", "/images/**").permitAll()
 
-                        // API - requer autenticação
+                        // API protegida
                         .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/emails/**").authenticated()
 
-                        // Qualquer outra requisição
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Mudei para manter sessão
                 );
 
         return http.build();
@@ -60,36 +57,17 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Configuração mais específica para produção
         configuration.setAllowedOrigins(Arrays.asList(
                 "https://armazenar-production.up.railway.app",
                 "http://localhost:3000",
                 "http://localhost:8080"
         ));
 
-        configuration.setAllowedMethods(Arrays.asList(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
-        ));
-
-        configuration.setAllowedHeaders(Arrays.asList(
-                "Authorization",
-                "Content-Type",
-                "Accept",
-                "Origin",
-                "X-Requested-With",
-                "Access-Control-Request-Method",
-                "Access-Control-Request-Headers"
-        ));
-
-        configuration.setExposedHeaders(Arrays.asList(
-                "Authorization",
-                "Content-Type",
-                "Access-Control-Allow-Origin",
-                "Access-Control-Allow-Credentials"
-        ));
-
-        configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L); // 1 hora
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true); // IMPORTANTE: true para sessões
+        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
